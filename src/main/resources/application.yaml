@@ -1,1 +1,17 @@
-
+server:
+  port: 8080
+spring:
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://8.140.156.107:1433;database=POSHINGSWR
+    username: sa
+    password: 19970603
+  aop:
+    auto: true
+    proxy-target-class: true
+mybatis-plus:
+  mapper-locations: classpath:com/poshing/swr/mapper/**.xml
+  type-aliases-package: com.poshing.swr.entity
+  configuration:
+    jdbc-type-for-null: VARCHAR
+  #??JdbcTypeForNull, oracle???????
