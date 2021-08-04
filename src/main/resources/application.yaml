@@ -2,16 +2,15 @@ server:
   port: 8080
 spring:
   datasource:
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    url: jdbc:sqlserver://8.140.156.107:1433;database=POSHINGSWR
-    username: sa
-    password: 19970603
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/checkdemo?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: root
   aop:
     auto: true
     proxy-target-class: true
 mybatis-plus:
-  mapper-locations: classpath:com/poshing/swr/mapper/**.xml
-  type-aliases-package: com.poshing.swr.entity
+  mapper-locations: classpath:com/poshing/checkdemo/mapper/**.xml
+  type-aliases-package: com.poshing.checkdemo.entity
   configuration:
     jdbc-type-for-null: VARCHAR
-  #??JdbcTypeForNull, oracle???????
