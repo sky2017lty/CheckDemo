@@ -12,6 +12,7 @@
         <!-- <link rel="stylesheet" href="./css/theme5.css"> -->
         <script src="./lib/layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="./js/xadmin.js"></script>
+        <script type="text/javascript" src="./js/normal.js"></script>
         <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
         <!--[if lt IE 9]>
           <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
@@ -32,13 +33,13 @@
             </div>
             <ul class="layui-nav right" lay-filter="">
                 <li class="layui-nav-item">
-                    <a href="javascript:;">admin</a>
+                    <a href="javascript:;"><span class="username"></span></a>
                     <dl class="layui-nav-child">
                         <!-- 二级菜单 -->
                         <dd>
                             <a onclick="xadmin.open('修改密码','http://www.baidu.com')">修改密码</a></dd>
                         <dd>
-                            <a href="./login.html">退出</a></dd>
+                            <a onclick="exitLogin();">退出</a></dd>
                     </dl>
                 </li>
             </ul>
@@ -290,3 +291,9 @@
     </body>
 
 </html>
+
+<script>
+    window.onload = function () {
+        loginCheck();
+    };
+</script>
