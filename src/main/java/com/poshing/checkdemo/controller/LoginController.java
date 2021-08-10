@@ -1,5 +1,6 @@
 package com.poshing.checkdemo.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.poshing.checkdemo.service.LoginServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,17 +23,30 @@ public class LoginController {
     @PostMapping("/checkLogin")
     @ResponseBody
     public String checkLogin(HttpServletRequest request) {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        return loginServices.checkLogin(username, password);
+        return loginServices.checkLogin(request);
     }
 
     @PostMapping("/register")
     @ResponseBody
     public String register(HttpServletRequest request) {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        return loginServices.register(username, password);
+        return loginServices.register(request);
     }
 
+    @PostMapping("/updatePass")
+    @ResponseBody
+    public String updatePass(HttpServletRequest request) {
+        return loginServices.updatePass(request);
+    }
+
+    @PostMapping("/checkSession")
+    @ResponseBody
+    public String checkSession(HttpServletRequest request) {
+        return loginServices.checkSession(request);
+    }
+
+    @PostMapping("/delSession")
+    @ResponseBody
+    public String delSession(HttpServletRequest request) {
+        return loginServices.delSession(request);
+    }
 }

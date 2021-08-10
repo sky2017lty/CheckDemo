@@ -1,0 +1,10 @@
+/*这里需要加上 .layui-table 如若不加可能会不生效*/
+.layui-table .layui-table-cell {
+    height: auto;
+    word-break: normal;
+    display: block;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow: hidden;
+    padding: 0 10px !important;
+}

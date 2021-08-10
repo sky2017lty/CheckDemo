@@ -2,10 +2,67 @@ function isNull(str) {
     return str === null || str === undefined || str.length === 0;
 }
 
+function getDate() {
+    var date = new Date();
+    var year = date.getFullYear(); //获取当前年份
+    var mon = date.getMonth() + 1; //获取当前月份
+    var da = date.getDate(); //获取当前日
+    return year + '-' + mon + '-' + da ;
+}
+
+function getTime() {
+    var date = new Date();
+    var year = date.getFullYear(); //获取当前年份
+    var mon = date.getMonth() + 1; //获取当前月份
+    var da = date.getDate(); //获取当前日
+    var h = date.getHours(); //获取小时
+    if (h < 10) {
+        h = "0" + h;
+    }
+    var m = date.getMinutes(); //获取分钟
+    if (m < 10) {
+        m = "0" + m;
+    }
+    var s = date.getSeconds(); //获取秒
+    if (s < 10) {
+        s = "0" + s;
+    }
+    return year + '年' + mon + '月' + da + '日' + ' ' + h + ':' + m + ':' + s;
+}
+
+function getUrlVariable(variable) {
+    var query = window.location.toString();
+    var urlParams = query.split("?");
+    var vars = urlParams[1].split("&");
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split("=");
+        if (pair[0] === variable) {
+            return pair[1];
+        }
+    }
+    return false;
+}
+
+//重新渲染表单
+function renderForm() {
+    layui.use('form', function () {
+        var form = layui.form;//高版本建议把括号去掉，有的低版本，需要加()
+        form.render();
+    });
+}
+
+//重新渲染表格
+function reloadTable(id) {
+    layui.use('table', function () {
+        var table = layui.table;//高版本建议把括号去掉，有的低版本，需要加()
+        table.reload(id);
+    });
+}
+
 // 检查是否登陆
 function loginCheck() {
     var cookies = getCookie("username");
-    if (isNull(cookies)) {
+    if (!checkSession(cookies)) {
         window.location.href = "./login.html";
     } else {
         $(".username").text(cookies);
@@ -15,6 +72,7 @@ function loginCheck() {
 //退出登录
 function exitLogin() {
     cleanCookies("username");
+    delSession("username");
     window.location.href = "./login.html";
 }
 
@@ -45,4 +103,54 @@ function setCookieDays(cname, cvalue, exdays) {
 //清除cookies
 function cleanCookies(cname) {
     setCookieDays(cname, "", -1);
+}
+
+function checkSession(sname) {
+    var flag = false;
+    $.ajax({
+        url: "/checkSession",    //请求的url地址
+        dataType: "json",   //返回格式为json
+        data:  {sname: sname},    //参数值
+        type: "POST",   //请求方式
+        async : false,
+        success: function (req) {
+            //请求成功时处理
+            flag = req.code === 0;
+        }
+    });
+    return flag;
+}
+
+function delSession(sname) {
+    var flag = false;
+    $.ajax({
+        url: "/delSession",    //请求的url地址
+        dataType: "json",   //返回格式为json
+        data:  {sname: sname},    //参数值
+        type: "POST",   //请求方式
+        async : false,
+        success: function (req) {
+            //请求成功时处理
+            flag = req.code === 0;
+        }
+    });
+    return flag;
+}
+
+function checkCode(code) {
+    switch (code) {
+        //成功
+        case 0:
+            break;
+        //管理员登录成功
+        case 1:
+            break;
+        //失败
+        case 200:
+            break;
+        //未登录
+        case 201:
+            window.location.href = "./login.html";
+            break;
+    }
 }

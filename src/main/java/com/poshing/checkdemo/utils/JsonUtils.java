@@ -1,7 +1,11 @@
 package com.poshing.checkdemo.utils;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
+/**
+ * @author litianyi
+ */
 public class JsonUtils {
     private static final JsonUtils INSTANCE = new JsonUtils();
 
@@ -35,5 +39,12 @@ public class JsonUtils {
                     "\"msg\": \"" + msg + "\"\n" +
                     "} ";
         }
+    }
+
+    public String formatLayerJson(int code, String msg) {
+        JSONObject json = new JSONObject();
+        json.put("code", code);
+        json.put("msg", msg);
+        return json.toJSONString();
     }
 }
