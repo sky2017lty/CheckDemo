@@ -26,6 +26,24 @@ public class LoginController {
         return loginServices.checkLogin(request);
     }
 
+    @PostMapping("/getUser")
+    @ResponseBody
+    public String getUser(HttpServletRequest request) {
+        return loginServices.getUser(request);
+    }
+
+    @PostMapping("/addUser")
+    @ResponseBody
+    public String addUser(HttpServletRequest request) {
+        return loginServices.addUser(request);
+    }
+
+    @PostMapping("/deleteUser")
+    @ResponseBody
+    public String deleteUser(HttpServletRequest request) {
+        return loginServices.deleteUser(request);
+    }
+
     @PostMapping("/register")
     @ResponseBody
     public String register(HttpServletRequest request) {

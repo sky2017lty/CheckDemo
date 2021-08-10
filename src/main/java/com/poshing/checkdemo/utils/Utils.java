@@ -77,7 +77,7 @@ public class Utils {
      */
     public static String getTime() {
         Date dNow = new Date();
-        SimpleDateFormat ft = new SimpleDateFormat("hh:mm:ss");
+        SimpleDateFormat ft = new SimpleDateFormat("HH:mm:ss");
         return ft.format(dNow);
     }
 

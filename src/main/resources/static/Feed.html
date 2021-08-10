@@ -49,9 +49,9 @@
                             <input class="layui-input" autocomplete="off" placeholder="对应机械臂编号" name="feeding_machine"
                                    id="feeding_machine">
                         </div>
-<!--                        <div class="layui-inline layui-show-xs-block">-->
-<!--                            <button class="layui-btn" lay-submit="" lay-filter="sreach">进站</button>-->
-<!--                        </div>-->
+                        <!--                        <div class="layui-inline layui-show-xs-block">-->
+                        <!--                            <button class="layui-btn" lay-submit="" lay-filter="sreach">进站</button>-->
+                        <!--                        </div>-->
                     </form>
                 </div>
                 <div class="layui-card-body layui-table-body layui-table-main">
@@ -63,6 +63,15 @@
 </div>
 </body>
 <script>
+    window.onload = function () {
+        setInterval(function () {
+            layui.table.reload('check_table', {
+                url: '/checkData'
+                , where: {}
+            });
+        }, 5000);
+    }
+
     $("#feeding_MES").keyup(function (event) {
         if (event.keyCode == 13) {
             //这里填写你要做的事件
@@ -102,7 +111,7 @@
                                 var table = layui.table;//高版本建议把括号去掉，有的低版本，需要加()
                                 table.reload('check_table', {
                                     url: '/checkData'
-                                    ,where: {}
+                                    , where: {}
                                 });
                             });
                             $("#feeding_MES").focus();
@@ -120,15 +129,24 @@
     });
 
 
-    layui.use(['laydate', 'form', 'table'], function () {
+    layui.config({
+        base: 'lib/',
+    }).extend({
+        excel: 'layui_exts/excel',
+        tablePlug: 'tablePlug/tablePlug'
+    }).use(['laydate', 'form', 'table', 'excel', 'tablePlug'], function () {
         var laydate = layui.laydate;
         var form = layui.form;
         var table = layui.table;
+        var tablePlug = layui.tablePlug;
+
+        tablePlug.smartReload.enable(true);//处理不闪动的关键代码
 
         table.render({
             elem: '#check_table'
             , height: 400
             , url: '/checkData' //数据接口
+            , smartReloadModel: true
             , cols: [[ //表头
                 {field: 'uuid', title: 'UUID', width: 80, sort: true, fixed: 'left', hide: true}
                 , {

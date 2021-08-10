@@ -39,7 +39,7 @@ public class CheckServicesImpl implements CheckServices {
         String feedingMes = request.getParameter("feeding_MES");
         String feedingNo = request.getParameter("feeding_no");
         String feedingMachine = request.getParameter("feeding_machine");
-        String username = Utils.getSession(request, "username");
+        String username = Utils.getSession(request, "name");
         boolean mes = Utils.isNull(feedingMes);
         boolean no = Utils.isNull(feedingNo);
         boolean machine = Utils.isNull(feedingMachine);
@@ -70,7 +70,7 @@ public class CheckServicesImpl implements CheckServices {
         String cuttingMes = request.getParameter("cutting_MES");
         String cuttingNo = request.getParameter("cutting_no");
         String cuttingMachine = request.getParameter("cutting_machine");
-        String username = Utils.getSession(request, "username");
+        String username = Utils.getSession(request, "name");
         boolean mes = Utils.isNull(cuttingMes);
         boolean no = Utils.isNull(cuttingNo);
         boolean machine = Utils.isNull(cuttingMachine);
@@ -92,11 +92,13 @@ public class CheckServicesImpl implements CheckServices {
         String end = request.getParameter("end");
         List<Checklog> checklogList;
         if (Utils.isNull(start) && Utils.isNull(end)) {
-            checklogList = checklogDao.selectList(new QueryWrapper<Checklog>());
+            checklogList = checklogDao.selectList(new QueryWrapper<Checklog>()
+                    .orderByDesc("cutting_date", "cutting_time"));
         } else {
             checklogList = checklogDao.selectList(new QueryWrapper<Checklog>()
                     .ge("cutting_date", start)
-                    .le("cutting_date", end));
+                    .le("cutting_date", end)
+                    .orderByDesc("cutting_date", "cutting_time"));
         }
         return JsonUtils.getInstance().formatLayerJson(0, "success", checklogList.size(), JSON.toJSONString(checklogList));
     }

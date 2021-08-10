@@ -41,4 +41,25 @@ public interface LoginServices {
      * @return
      */
     String delSession(HttpServletRequest request);
+
+    /**
+     * 获取用户用于管理
+     * @param request
+     * @return
+     */
+    String getUser(HttpServletRequest request);
+
+    /**
+     * 增加用户
+     * @param request
+     * @return
+     */
+    String addUser(HttpServletRequest request);
+
+    /**
+     * 删除用户
+     * @param request
+     * @return
+     */
+    String deleteUser(HttpServletRequest request);
 }

@@ -62,10 +62,11 @@ function reloadTable(id) {
 // 检查是否登陆
 function loginCheck() {
     var cookies = getCookie("username");
+    var name = getCookie("name");
     if (!checkSession(cookies)) {
         window.location.href = "./login.html";
     } else {
-        $(".username").text(cookies);
+        $(".username").text(name);
     }
 }
 
@@ -73,6 +74,8 @@ function loginCheck() {
 function exitLogin() {
     cleanCookies("username");
     delSession("username");
+    cleanCookies("name");
+    delSession("name");
     window.location.href = "./login.html";
 }
 

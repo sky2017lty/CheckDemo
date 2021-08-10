@@ -49,6 +49,11 @@
                             <button type="button" id="search" class="layui-btn" lay-filter="sreach">查找</button>
                         </div>
                         <div class="layui-inline layui-show-xs-block">
+                            <button type="button" id="flash" class="layui-btn layui-btn-normal" lay-filter="flash">
+                                刷新数据
+                            </button>
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
                             <button type="button" id="excel" class="layui-btn layui-btn-warm" lay-filter="excel">
                                 导出Excel
                             </button>
@@ -94,7 +99,7 @@
 </html>
 <script>
     window.onload = function () {
-        var cookies = getCookie("username");
+        var cookies = getCookie("name");
         $(".username").text(cookies);
         setInterval(function () {
             var d = document.getElementById('time_now');
@@ -103,14 +108,18 @@
     }
 
     layui.config({
-        base: 'lib/layui_exts/',
+        base: 'lib/',
     }).extend({
-        excel: 'excel',
-    }).use(['laydate', 'form', 'table', 'excel'], function () {
+        excel: 'layui_exts/excel',
+        tablePlug: 'tablePlug/tablePlug'
+    }).use(['laydate', 'form', 'table', 'excel', 'tablePlug'], function () {
         var laydate = layui.laydate;
         var form = layui.form;
         var table = layui.table;
         var excel = layui.excel;
+        var tablePlug = layui.tablePlug;
+
+        tablePlug.smartReload.enable(true);//处理不闪动的关键代码
 
         laydate.render({
             elem: '#start' //指定元素
@@ -136,10 +145,18 @@
             })
         });
 
+        $("#flash").click(function () {
+            table.reload('log_table', {
+                url: '/getAllLog'
+                , where: {}
+            })
+        });
+
         table.render({
             elem: '#log_table'
             , height: 500
             , url: '/getAllLog' //数据接口
+            , smartReloadModel: true
             // , page: true //开启分页
             , cols: [[ //表头
                 {field: 'uuid', title: 'UUID', width: 80, sort: true, fixed: 'left', hide: true}

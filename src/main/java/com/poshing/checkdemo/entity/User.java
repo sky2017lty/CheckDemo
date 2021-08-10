@@ -20,6 +20,8 @@ public class User extends Model<User> {
     
     private String password;
 
+    private String name;
+
 
     public String getUuid() {
         return uuid;
@@ -45,4 +47,11 @@ public class User extends Model<User> {
         this.password = password;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

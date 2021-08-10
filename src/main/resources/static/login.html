@@ -49,9 +49,11 @@
                         //请求成功时处理
                         if (req.code === 0) {
                             setCookie("username", req.data.username);
+                            setCookie("name", req.data.name);
                             location.href = 'index.html';
                         } else if (req.code === 1) {
                             setCookie("username", "admin");
+                            setCookie("name", "管理员");
                             location.href = 'index.html';
                         } else {
                             layer.alert("用户名或密码错误");
