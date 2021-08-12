@@ -45,10 +45,10 @@
                             <input class="layui-input" autocomplete="off" placeholder="上料位编号" name="feeding_no"
                                    id="feeding_no">
                         </div>
-                        <div class="layui-inline layui-show-xs-block">
-                            <input class="layui-input" autocomplete="off" placeholder="对应机械臂编号" name="feeding_machine"
-                                   id="feeding_machine">
-                        </div>
+                        <!--                        <div class="layui-inline layui-show-xs-block">-->
+                        <!--                            <input class="layui-input" autocomplete="off" placeholder="对应机械臂编号" name="feeding_machine"-->
+                        <!--                                   id="feeding_machine">-->
+                        <!--                        </div>-->
                         <!--                        <div class="layui-inline layui-show-xs-block">-->
                         <!--                            <button class="layui-btn" lay-submit="" lay-filter="sreach">进站</button>-->
                         <!--                        </div>-->
@@ -80,51 +80,50 @@
         }
     });
 
+    // $("#feeding_no").keyup(function (event) {
+    //     if (event.keyCode == 13) {
+    //         //这里填写你要做的事件
+    //         $("#feeding_machine").val("").focus();
+    //         // $("#feeding_machine").focus();
+    //     }
+    // });
+
     $("#feeding_no").keyup(function (event) {
         if (event.keyCode == 13) {
-            //这里填写你要做的事件
-            $("#feeding_machine").val("").focus();
-            // $("#feeding_machine").focus();
-        }
-    });
-
-    $("#feeding_machine").keyup(function (event) {
-        if (event.keyCode == 13) {
-            if ($("#feeding_no").val() !== $("#feeding_machine").val()) {
-                $("#feeding_MES").val("");
-                $("#feeding_no").val("");
-                $("#feeding_machine").val("");
-                layer.alert("上料位编号与对应机械臂编号不同");
-            } else {
-                $.ajax({
-                    url: "/addFeedingCheck",    //请求的url地址
-                    dataType: "json",   //返回格式为json
-                    data: $("#feeding_form").serialize(),    //参数值
-                    type: "Get",   //请求方式
-                    async: false,
-                    success: function (req) {
-                        if (req.code === 0) {
-                            $("#feeding_MES").val("");
-                            $("#feeding_no").val("");
-                            $("#feeding_machine").val("");
-                            layui.use('table', function () {
-                                var table = layui.table;//高版本建议把括号去掉，有的低版本，需要加()
-                                table.reload('check_table', {
-                                    url: '/checkData'
-                                    , where: {}
-                                });
-                            });
-                            $("#feeding_MES").focus();
-                        } else {
-                            $("#feeding_MES").val("");
-                            $("#feeding_no").val("");
-                            $("#feeding_machine").val("");
-                            layer.alert("添加失败 " + req.msg);
-                        }
-
+            // if ($("#feeding_no").val() !== $("#feeding_machine").val()) {
+            //     $("#feeding_MES").val("");
+            //     $("#feeding_no").val("");
+            //     $("#feeding_machine").val("");
+            //     layer.alert("上料位编号与对应机械臂编号不同");
+            // } else {
+            $.ajax({
+                url: "/addFeedingCheck",    //请求的url地址
+                dataType: "json",   //返回格式为json
+                data: $("#feeding_form").serialize(),    //参数值
+                type: "Get",   //请求方式
+                async: false,
+                success: function (req) {
+                    if (req.code === 0) {
+                        $("#feeding_MES").val("");
+                        $("#feeding_no").val("");
+                        $("#feeding_machine").val("");
+                        layui.table.reload('check_table', {
+                            url: '/checkData'
+                            , where: {}
+                        });
+                        playAudio(true);
+                        $("#feeding_MES").focus();
+                    } else {
+                        $("#feeding_MES").val("");
+                        $("#feeding_no").val("");
+                        $("#feeding_machine").val("");
+                        playAudio(false);
+                        layer.alert("添加失败 " + req.msg);
                     }
-                });
-            }
+
+                }
+            });
+            // }
         }
     });
 
@@ -150,14 +149,14 @@
             , cols: [[ //表头
                 {field: 'uuid', title: 'UUID', width: 80, sort: true, fixed: 'left', hide: true}
                 , {
-                    field: 'date', title: '操作时间', width: "20%", templet: function (d) {
+                    field: 'date', title: '操作时间', templet: function (d) {
                         return d.date + " " + d.time;
                     }
                 }
-                , {field: 'feedingMes', title: 'MES码', width: "20%"}
-                , {field: 'feedingNo', title: '上料位编号', width: "20%"}
-                , {field: 'feedingMachine', title: '对应机械臂编号', width: "20%"}
-                , {field: 'username', title: '操作人', width: "20%"}
+                , {field: 'feedingMes', title: 'MES码'}
+                , {field: 'feedingNo', title: '上料位编号'}
+                // , {field: 'feedingMachine', title: '对应机械臂编号', width: "20%"}
+                , {field: 'username', title: '操作人'}
             ]]
         });
     });

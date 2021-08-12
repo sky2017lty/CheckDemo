@@ -157,3 +157,14 @@ function checkCode(code) {
             break;
     }
 }
+
+const audioFailed = new Audio('audio/failed.m4a');
+const audioSuccess = new Audio('audio/success.m4a');
+
+function playAudio(flag) {
+    if (flag) {
+        audioSuccess.play();
+    } else {
+        audioFailed.play();
+    }
+}

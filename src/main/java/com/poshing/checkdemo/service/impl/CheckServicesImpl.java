@@ -38,12 +38,12 @@ public class CheckServicesImpl implements CheckServices {
     public String addFeedingCheck(HttpServletRequest request) {
         String feedingMes = request.getParameter("feeding_MES");
         String feedingNo = request.getParameter("feeding_no");
-        String feedingMachine = request.getParameter("feeding_machine");
+//        String feedingMachine = request.getParameter("feeding_machine");
         String username = Utils.getSession(request, "name");
         boolean mes = Utils.isNull(feedingMes);
         boolean no = Utils.isNull(feedingNo);
-        boolean machine = Utils.isNull(feedingMachine);
-        if (mes || no || machine) {
+//        boolean machine = Utils.isNull(feedingMachine);
+        if (mes || no /*|| machine*/) {
             return JsonUtils.getInstance().formatLayerJson(200, "数据错误，请重新核对");
         }
         Feedingcheck selectOne = feedingcheckDao.selectOne(new QueryWrapper<Feedingcheck>()
@@ -53,7 +53,7 @@ public class CheckServicesImpl implements CheckServices {
             one.setUuid(UUIDUtils.getUuid());
             one.setFeedingMes(feedingMes);
             one.setFeedingNo(feedingNo);
-            one.setFeedingMachine(feedingMachine);
+//            one.setFeedingMachine(feedingMachine);
             one.setUsername(username);
             one.setDate(Utils.getDate());
             one.setTime(Utils.getTime());
@@ -69,12 +69,12 @@ public class CheckServicesImpl implements CheckServices {
     public String cutting(HttpServletRequest request) {
         String cuttingMes = request.getParameter("cutting_MES");
         String cuttingNo = request.getParameter("cutting_no");
-        String cuttingMachine = request.getParameter("cutting_machine");
+//        String cuttingMachine = request.getParameter("cutting_machine");
         String username = Utils.getSession(request, "name");
         boolean mes = Utils.isNull(cuttingMes);
         boolean no = Utils.isNull(cuttingNo);
-        boolean machine = Utils.isNull(cuttingMachine);
-        if (mes || no || machine) {
+//        boolean machine = Utils.isNull(cuttingMachine);
+        if (mes || no /*|| machine*/) {
             return JsonUtils.getInstance().formatLayerJson(200, "数据错误，请重新核对");
         }
         Feedingcheck selectOne = feedingcheckDao.selectOne(new QueryWrapper<Feedingcheck>()
@@ -82,7 +82,8 @@ public class CheckServicesImpl implements CheckServices {
         if (selectOne == null) {
             return JsonUtils.getInstance().formatLayerJson(200, "找不到MES");
         } else {
-            return insertLog(selectOne, cuttingMes, cuttingNo, cuttingMachine, username);
+//            return insertLog(selectOne, cuttingMes, cuttingNo, cuttingMachine, username);
+            return insertLog(selectOne, cuttingMes, cuttingNo, username);
         }
     }
 
@@ -121,6 +122,35 @@ public class CheckServicesImpl implements CheckServices {
         int flag = 0;
         int flagFeeding = 0;
         if (feedingcheck.getFeedingMes().equals(cuttingMes) && feedingcheck.getFeedingNo().equals(cuttingNo) && feedingcheck.getFeedingMachine().equals(cuttingMachine)) {
+            checklog.setResult("正确");
+            flagFeeding = feedingcheckDao.deleteById(feedingcheck);
+        } else {
+            checklog.setResult("错误");
+        }
+        int flagCutting = checklogDao.insert(checklog);
+        if (flagFeeding == 1 && flagCutting == 1) {
+            flag = 1;
+        }
+        return Utils.returnJson(flag);
+    }
+
+    private String insertLog(Feedingcheck feedingcheck, String cuttingMes, String cuttingNo, String cuttingUsername) {
+        Checklog checklog = new Checklog();
+        checklog.setUuid(UUIDUtils.getUuid());
+        checklog.setFeedingUsername(feedingcheck.getUsername());
+        checklog.setFeedingDate(feedingcheck.getDate());
+        checklog.setFeedingTime(feedingcheck.getTime());
+        checklog.setFeedingMes(feedingcheck.getFeedingMes());
+        checklog.setFeedingNo(feedingcheck.getFeedingNo());
+        checklog.setFeedingMachine(feedingcheck.getFeedingMachine());
+        checklog.setCuttingUsername(cuttingUsername);
+        checklog.setCuttingDate(Utils.getDate());
+        checklog.setCuttingTime(Utils.getTime());
+        checklog.setCuttingMes(cuttingMes);
+        checklog.setCuttingNo(cuttingNo);
+        int flag = 0;
+        int flagFeeding = 0;
+        if (feedingcheck.getFeedingMes().equals(cuttingMes) && feedingcheck.getFeedingNo().equals(cuttingNo)) {
             checklog.setResult("正确");
             flagFeeding = feedingcheckDao.deleteById(feedingcheck);
         } else {
