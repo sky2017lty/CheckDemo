@@ -167,7 +167,7 @@
                 }
                 , {field: 'feedingMes', title: '上料MES'}
                 , {field: 'feedingNo', title: '上料位编号'}
-                , {field: 'feedingMachine', title: '上料机械臂编号'}
+                // , {field: 'feedingMachine', title: '上料机械臂编号'}
                 , {field: 'feedingUsername', title: '上料人'}
                 , {
                     field: 'cuttingDate', title: '下料时间', templet: function (d) {
@@ -176,7 +176,7 @@
                 }
                 , {field: 'cuttingMes', title: '下料MES'}
                 , {field: 'cuttingNo', title: '下料位编号'}
-                , {field: 'cuttingMachine', title: '下料机械臂编号'}
+                // , {field: 'cuttingMachine', title: '下料机械臂编号'}
                 , {field: 'cuttingUsername', title: '下料人'}
                 , {field: 'result', title: '比对结果'}
             ]]
@@ -202,14 +202,14 @@
                         },
                         feedingMes: 'feedingMes',
                         feedingNo: 'feedingNo',
-                        feedingMachine: 'feedingMachine',
+                        // feedingMachine: 'feedingMachine',
                         feedingUsername: 'feedingUsername',
                         cuttingdate: function (value, line, data) {
                             return line['cuttingDate'] + " " + line['cuttingTime'];
                         },
                         cuttingMes: 'cuttingMes',
                         cuttingNo: 'cuttingNo',
-                        cuttingMachine: 'cuttingMachine',
+                        // cuttingMachine: 'cuttingMachine',
                         cuttingUsername: 'cuttingUsername',
                         result: 'result',
                     });
@@ -217,16 +217,16 @@
                         feedingdate: '上料时间',
                         feedingMes: '上料MES',
                         feedingNo: '上料位编号',
-                        feedingMachine: '上料机械臂编号',
+                        // feedingMachine: '上料机械臂编号',
                         feedingUsername: '上料人',
                         cuttingdate: '下料时间',
                         cuttingMes: '下料MES',
                         cuttingNo: '下料位编号',
-                        cuttingMachine: '下料机械臂编号',
+                        // cuttingMachine: '下料机械臂编号',
                         cuttingUsername: '下料人',
                         result: '比对结果',
                     });
-                    excel.exportExcel(data, 'MES验证数据统计' + getDate() + '.xlsx', 'xls');
+                    excel.exportExcel(data, 'MES验证数据统计' + start + "-" + end + '.xls', 'xls');
                 }
             });
         });
