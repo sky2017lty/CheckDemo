@@ -30,6 +30,12 @@ public class CheckController {
         return checkServices.addFeedingCheck(request);
     }
 
+    @PostMapping("/addFeedingCheckGroup")
+    @ResponseBody
+    public String addFeedingCheckGroup(HttpServletRequest request) {
+        return checkServices.addFeedingCheckGroup(request);
+    }
+
     @GetMapping("/cutting")
     @ResponseBody
     public String cutting(HttpServletRequest request) {
