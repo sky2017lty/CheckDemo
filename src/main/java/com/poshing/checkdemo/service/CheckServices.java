@@ -19,4 +19,6 @@ public interface CheckServices {
     String cutting(HttpServletRequest request);
 
     String getAllLog(HttpServletRequest request);
+
+    String addFeedingCheckGroup(HttpServletRequest request);
 }

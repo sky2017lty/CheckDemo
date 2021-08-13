@@ -24,8 +24,10 @@ public class Feedingcheck extends Model<Feedingcheck> {
     
     private String feedingNo;
     
-    private String feedingMachine;
-    
+    private String feedingGroup;
+
+    private String feedingGroupno;
+
     private String username;
 
 
@@ -69,12 +71,20 @@ public class Feedingcheck extends Model<Feedingcheck> {
         this.feedingNo = feedingNo;
     }
 
-    public String getFeedingMachine() {
-        return feedingMachine;
+    public String getFeedingGroup() {
+        return feedingGroup;
     }
 
-    public void setFeedingMachine(String feedingMachine) {
-        this.feedingMachine = feedingMachine;
+    public void setFeedingGroup(String feedingGroup) {
+        this.feedingGroup = feedingGroup;
+    }
+
+    public String getFeedingGroupno() {
+        return feedingGroupno;
+    }
+
+    public void setFeedingGroupno(String feedingGroupno) {
+        this.feedingGroupno = feedingGroupno;
     }
 
     public String getUsername() {
