@@ -47,4 +47,16 @@ public class CheckController {
     public String getAllLog(HttpServletRequest request) {
         return checkServices.getAllLog(request);
     }
+
+    @PostMapping("/getLastGroup")
+    @ResponseBody
+    public String getLastGroup(HttpServletRequest request) {
+        return checkServices.getLastGroup(request);
+    }
+
+    @PostMapping("/setWarning")
+    @ResponseBody
+    public String setWarning(HttpServletRequest request) {
+        return checkServices.setWarning(request);
+    }
 }

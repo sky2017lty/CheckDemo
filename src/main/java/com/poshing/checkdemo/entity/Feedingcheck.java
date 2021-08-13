@@ -28,6 +28,8 @@ public class Feedingcheck extends Model<Feedingcheck> {
 
     private String feedingGroupno;
 
+    private String feedingTimestamp;
+
     private String username;
 
 
@@ -85,6 +87,14 @@ public class Feedingcheck extends Model<Feedingcheck> {
 
     public void setFeedingGroupno(String feedingGroupno) {
         this.feedingGroupno = feedingGroupno;
+    }
+
+    public String getFeedingTimestamp() {
+        return feedingTimestamp;
+    }
+
+    public void setFeedingTimestamp(String feedingTimestamp) {
+        this.feedingTimestamp = feedingTimestamp;
     }
 
     public String getUsername() {

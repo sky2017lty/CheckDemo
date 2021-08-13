@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html class="x-admin-sm" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<html class="x-admin-sm" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"
+      xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>欢迎页面-X-admin2.2</title>
@@ -54,21 +55,6 @@
                         <div class="layui-inline layui-show-xs-block">
                             <!--                            <input class="layui-input" autocomplete="off" readonly="readonly" placeholder="" value="1" name="feeding_groupno"-->
                             <!--                                   id="feeding_groupno">-->
-                            2
-                            <input class="layui-input" type="hidden" name="groupno_2" readonly="readonly" value="2">
-                        </div>
-                        <div class="layui-inline layui-show-xs-block">
-                            <input class="layui-input" autocomplete="off" placeholder="MES码" name="feeding_MES_2"
-                                   id="feeding_MES_2">
-                        </div>
-                        <div class="layui-inline layui-show-xs-block">
-                            <input class="layui-input" autocomplete="off" placeholder="上料位编号" name="feeding_no_2"
-                                   id="feeding_no_2">
-                        </div>
-                        </br>
-                        <div class="layui-inline layui-show-xs-block">
-                            <!--                            <input class="layui-input" autocomplete="off" readonly="readonly" placeholder="" value="1" name="feeding_groupno"-->
-                            <!--                                   id="feeding_groupno">-->
                             3
                             <input class="layui-input" type="hidden" name="groupno_3" readonly="readonly" value="3">
                         </div>
@@ -83,21 +69,6 @@
                         <div class="layui-inline layui-show-xs-block">
                             <!--                            <input class="layui-input" autocomplete="off" readonly="readonly" placeholder="" value="1" name="feeding_groupno"-->
                             <!--                                   id="feeding_groupno">-->
-                            4
-                            <input class="layui-input" type="hidden" name="groupno_4" readonly="readonly" value="4">
-                        </div>
-                        <div class="layui-inline layui-show-xs-block">
-                            <input class="layui-input" autocomplete="off" placeholder="MES码" name="feeding_MES_4"
-                                   id="feeding_MES_4">
-                        </div>
-                        <div class="layui-inline layui-show-xs-block">
-                            <input class="layui-input" autocomplete="off" placeholder="上料位编号" name="feeding_no_4"
-                                   id="feeding_no_4">
-                        </div>
-                        </br>
-                        <div class="layui-inline layui-show-xs-block">
-                            <!--                            <input class="layui-input" autocomplete="off" readonly="readonly" placeholder="" value="1" name="feeding_groupno"-->
-                            <!--                                   id="feeding_groupno">-->
                             5
                             <input class="layui-input" type="hidden" name="groupno_5" readonly="readonly" value="5">
                         </div>
@@ -109,6 +80,39 @@
                             <input class="layui-input" autocomplete="off" placeholder="上料位编号" name="feeding_no_5"
                                    id="feeding_no_5">
                         </div>
+                        </br>
+                        <div class="layui-inline layui-show-xs-block">
+                            <!--                            <input class="layui-input" autocomplete="off" readonly="readonly" placeholder="" value="1" name="feeding_groupno"-->
+                            <!--                                   id="feeding_groupno">-->
+                            2
+                            <input class="layui-input" type="hidden" name="groupno_2" readonly="readonly" value="2">
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <input class="layui-input" autocomplete="off" placeholder="MES码" name="feeding_MES_2"
+                                   id="feeding_MES_2">
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <input class="layui-input" autocomplete="off" placeholder="上料位编号" name="feeding_no_2"
+                                   id="feeding_no_2">
+                        </div>
+
+
+                        <div class="layui-inline layui-show-xs-block">
+                            <!--                            <input class="layui-input" autocomplete="off" readonly="readonly" placeholder="" value="1" name="feeding_groupno"-->
+                            <!--                                   id="feeding_groupno">-->
+                            4
+                            <input class="layui-input" type="hidden" name="groupno_4" readonly="readonly" value="4">
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <input class="layui-input" autocomplete="off" placeholder="MES码" name="feeding_MES_4"
+                                   id="feeding_MES_4">
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <input class="layui-input" autocomplete="off" placeholder="上料位编号" name="feeding_no_4"
+                                   id="feeding_no_4">
+                        </div>
+
+
                         <div class="layui-inline layui-show-xs-block">
                             <!--                            <input class="layui-input" autocomplete="off" readonly="readonly" placeholder="" value="1" name="feeding_groupno"-->
                             <!--                                   id="feeding_groupno">-->
@@ -127,6 +131,8 @@
                     </form>
                     <div class="layui-inline layui-show-xs-block" style="padding-top: 10px;padding-left: 15px;">
                         <button id="submit" class="layui-btn layui-fluid" lay-filter="">批量进站
+                        </button>
+                        <button id="warning" class="layui-btn layui-fluid layui-btn-warm" lay-filter="">警告处理
                         </button>
                     </div>
                 </div>
@@ -163,14 +169,27 @@
                         , where: {}
                     });
                     playAudio(true);
+                    $(':input','#feeding_form')
+                        .not(':button, :submit, :reset, :hidden')
+                        .val('')
+                        .removeAttr('checked')
+                        .removeAttr('selected');
                 } else {
                     playAudio(false);
                     layer.alert("添加失败 " + req.msg);
-                    return false;
+                    $(':input','#feeding_form')
+                        .not(':button, :submit, :reset, :hidden')
+                        .val('')
+                        .removeAttr('checked')
+                        .removeAttr('selected');
                 }
             }
         });
     });
+
+    $("#warning").click(function () {
+        xadmin.open('警告处理', 'warning.html');
+    })
 
 
     layui.config({

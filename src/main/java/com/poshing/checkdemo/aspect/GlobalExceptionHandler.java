@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     public String defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
-        e.printStackTrace();
+        LOGGER.error(String.valueOf(e.getCause()));
         return JsonUtils.getInstance().formatLayerJson(500, e.getCause().getMessage());
     }
 }

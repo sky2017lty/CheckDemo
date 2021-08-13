@@ -21,4 +21,8 @@ public interface CheckServices {
     String getAllLog(HttpServletRequest request);
 
     String addFeedingCheckGroup(HttpServletRequest request);
+
+    String getLastGroup(HttpServletRequest request);
+
+    String setWarning(HttpServletRequest request);
 }
