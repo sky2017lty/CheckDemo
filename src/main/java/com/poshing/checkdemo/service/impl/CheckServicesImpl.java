@@ -205,8 +205,8 @@ public class CheckServicesImpl implements CheckServices {
 
     @Override
     public String getLastGroup(HttpServletRequest request) {
-        List<Object> one = groupDao.selectObjs(new QueryWrapper<Feedinggroup>().select("max(group_timestamp)"));
-//        List<Object> one = groupDao.selectObjs(new QueryWrapper<Feedinggroup>().select("min(group_timestamp)"));
+//        List<Object> one = groupDao.selectObjs(new QueryWrapper<Feedinggroup>().select("max(group_timestamp)"));
+        List<Object> one = groupDao.selectObjs(new QueryWrapper<Feedinggroup>().select("min(group_timestamp)"));
         if (one == null) {
             return JsonUtils.getInstance().formatLayerJson(200, "找不到数据");
         }
@@ -372,10 +372,7 @@ public class CheckServicesImpl implements CheckServices {
         int flag = 0;
         int flagFeeding = 0;
         if (feedingcheck.getFeedingMes().equals(cuttingMes) && feedingcheck.getFeedingNo().equals(cuttingNo)) {
-//            checklog.setResult("正确");
             flagFeeding = feedingcheckDao.deleteById(feedingcheck);
-        } else {
-//            checklog.setResult("错误");
         }
         int flagCutting = checklogDao.insert(checklog);
         if (flagFeeding == 1 && flagCutting == 1) {
@@ -386,7 +383,7 @@ public class CheckServicesImpl implements CheckServices {
 
     private boolean checkStringEqual(String... str) {
         for (int i = 0; i < str.length; i++) {
-            if (Utils.isNull(str[i])) {
+            if (!Utils.isNull(str[i])) {
                 for (int j = i + 1; j < str.length; j++) {
                     if (str[i].equals(str[j])) {
                         return true;
