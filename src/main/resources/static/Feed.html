@@ -46,11 +46,11 @@
                         </div>
                         <div class="layui-inline layui-show-xs-block">
                             <input class="layui-input" autocomplete="off" placeholder="MES码" name="feeding_MES_1"
-                                   id="feeding_MES_1">
+                                   id="feeding_MES_1" onkeyup="checkInput('feeding_MES_1')">
                         </div>
                         <div class="layui-inline layui-show-xs-block">
                             <input class="layui-input" autocomplete="off" placeholder="上料位编号" name="feeding_no_1"
-                                   id="feeding_no_1">
+                                   id="feeding_no_1" onkeyup="checkInput('feeding_no_1')">
                         </div>
                         <div class="layui-inline layui-show-xs-block">
                             <!--                            <input class="layui-input" autocomplete="off" readonly="readonly" placeholder="" value="1" name="feeding_groupno"-->
@@ -60,11 +60,11 @@
                         </div>
                         <div class="layui-inline layui-show-xs-block">
                             <input class="layui-input" autocomplete="off" placeholder="MES码" name="feeding_MES_3"
-                                   id="feeding_MES_3">
+                                   id="feeding_MES_3" onkeyup="checkInput('feeding_MES_3')">
                         </div>
                         <div class="layui-inline layui-show-xs-block">
                             <input class="layui-input" autocomplete="off" placeholder="上料位编号" name="feeding_no_3"
-                                   id="feeding_no_3">
+                                   id="feeding_no_3" onkeyup="checkInput('feeding_no_3')">
                         </div>
                         <div class="layui-inline layui-show-xs-block">
                             <!--                            <input class="layui-input" autocomplete="off" readonly="readonly" placeholder="" value="1" name="feeding_groupno"-->
@@ -74,11 +74,11 @@
                         </div>
                         <div class="layui-inline layui-show-xs-block">
                             <input class="layui-input" autocomplete="off" placeholder="MES码" name="feeding_MES_5"
-                                   id="feeding_MES_5">
+                                   id="feeding_MES_5" onkeyup="checkInput('feeding_MES_5')">
                         </div>
                         <div class="layui-inline layui-show-xs-block">
                             <input class="layui-input" autocomplete="off" placeholder="上料位编号" name="feeding_no_5"
-                                   id="feeding_no_5">
+                                   id="feeding_no_5" onkeyup="checkInput('feeding_no_5')">
                         </div>
                         </br>
                         <div class="layui-inline layui-show-xs-block">
@@ -89,11 +89,11 @@
                         </div>
                         <div class="layui-inline layui-show-xs-block">
                             <input class="layui-input" autocomplete="off" placeholder="MES码" name="feeding_MES_2"
-                                   id="feeding_MES_2">
+                                   id="feeding_MES_2" onkeyup="checkInput('feeding_MES_2')">
                         </div>
                         <div class="layui-inline layui-show-xs-block">
                             <input class="layui-input" autocomplete="off" placeholder="上料位编号" name="feeding_no_2"
-                                   id="feeding_no_2">
+                                   id="feeding_no_2" onkeyup="checkInput('feeding_no_2')">
                         </div>
 
 
@@ -105,11 +105,11 @@
                         </div>
                         <div class="layui-inline layui-show-xs-block">
                             <input class="layui-input" autocomplete="off" placeholder="MES码" name="feeding_MES_4"
-                                   id="feeding_MES_4">
+                                   id="feeding_MES_4" onkeyup="checkInput('feeding_MES_4')">
                         </div>
                         <div class="layui-inline layui-show-xs-block">
                             <input class="layui-input" autocomplete="off" placeholder="上料位编号" name="feeding_no_4"
-                                   id="feeding_no_4">
+                                   id="feeding_no_4" onkeyup="checkInput('feeding_no_4')">
                         </div>
 
 
@@ -121,11 +121,11 @@
                         </div>
                         <div class="layui-inline layui-show-xs-block">
                             <input class="layui-input" autocomplete="off" placeholder="MES码" name="feeding_MES_6"
-                                   id="feeding_MES_6">
+                                   id="feeding_MES_6" onkeyup="checkInput('feeding_MES_6')">
                         </div>
                         <div class="layui-inline layui-show-xs-block">
                             <input class="layui-input" autocomplete="off" placeholder="上料位编号" name="feeding_no_6"
-                                   id="feeding_no_6">
+                                   id="feeding_no_6" onkeyup="checkInput('feeding_no_6')">
                         </div>
                         </br>
                     </form>
@@ -154,38 +154,6 @@
         }, 5000);
     }
 
-
-    $("#submit").click(function () {
-        $.ajax({
-            url: "/addFeedingCheckGroup",    //请求的url地址
-            dataType: "json",   //返回格式为json
-            data: $("#feeding_form").serialize(),    //参数值
-            type: "POST",   //请求方式
-            async: false,
-            success: function (req) {
-                if (req.code === 0) {
-                    layui.table.reload('check_table', {
-                        url: '/checkData'
-                        , where: {}
-                    });
-                    playAudio(true);
-                    $(':input','#feeding_form')
-                        .not(':button, :submit, :reset, :hidden')
-                        .val('')
-                        .removeAttr('checked')
-                        .removeAttr('selected');
-                } else {
-                    playAudio(false);
-                    layer.alert("添加失败 " + req.msg);
-                    $(':input','#feeding_form')
-                        .not(':button, :submit, :reset, :hidden')
-                        .val('')
-                        .removeAttr('checked')
-                        .removeAttr('selected');
-                }
-            }
-        });
-    });
 
     $("#warning").click(function () {
         xadmin.open('警告处理', 'warning.html');
@@ -225,6 +193,44 @@
         });
     });
 
+    $("#submit").click(function () {
+        if (isNull($("#feeding_MES_1").val()) && isNull($("#feeding_MES_2").val())
+            && isNull($("#feeding_MES_3").val()) && isNull($("#feeding_MES_4").val())
+            && isNull($("#feeding_MES_5").val()) && isNull($("#feeding_MES_6").val())) {
+            playAudio(false);
+            return false;
+        }
+        $.ajax({
+            url: "/addFeedingCheckGroup",    //请求的url地址
+            dataType: "json",   //返回格式为json
+            data: $("#feeding_form").serialize(),    //参数值
+            type: "POST",   //请求方式
+            async: false,
+            success: function (req) {
+                if (req.code === 0) {
+                    layui.table.reload('check_table', {
+                        url: '/checkData'
+                        , where: {}
+                    });
+                    playAudio(true);
+                    $(':input', '#feeding_form')
+                        .not(':button, :submit, :reset, :hidden')
+                        .val('')
+                        .removeAttr('checked')
+                        .removeAttr('selected');
+                } else {
+                    playAudio(false);
+                    layer.alert("添加失败 " + req.msg);
+                    $(':input', '#feeding_form')
+                        .not(':button, :submit, :reset, :hidden')
+                        .val('')
+                        .removeAttr('checked')
+                        .removeAttr('selected');
+                }
+            }
+        });
+    });
+
 
     $("#feeding_MES_1").keyup(function (event) {
         if (event.keyCode == 13) {
@@ -235,7 +241,7 @@
     $("#feeding_no_1").keyup(function (event) {
         if (event.keyCode == 13) {
             //这里填写你要做的事件
-            $("#feeding_MES_2").val("").focus();
+            mesNo($("#feeding_MES_1").val(), $("#feeding_no_1").val(), 'feeding_no_1', 'feeding_MES_1', 'feeding_MES_2');
         }
     });
     $("#feeding_MES_2").keyup(function (event) {
@@ -247,7 +253,7 @@
     $("#feeding_no_2").keyup(function (event) {
         if (event.keyCode == 13) {
             //这里填写你要做的事件
-            $("#feeding_MES_3").val("").focus();
+            mesNo($("#feeding_MES_2").val(), $("#feeding_no_2").val(), 'feeding_no_2', 'feeding_MES_2', 'feeding_MES_3');
         }
     });
     $("#feeding_MES_3").keyup(function (event) {
@@ -259,7 +265,7 @@
     $("#feeding_no_3").keyup(function (event) {
         if (event.keyCode == 13) {
             //这里填写你要做的事件
-            $("#feeding_MES_4").val("").focus();
+            mesNo($("#feeding_MES_3").val(), $("#feeding_no_3").val(), 'feeding_no_3', 'feeding_MES_3', 'feeding_MES_4');
         }
     });
     $("#feeding_MES_4").keyup(function (event) {
@@ -271,7 +277,7 @@
     $("#feeding_no_4").keyup(function (event) {
         if (event.keyCode == 13) {
             //这里填写你要做的事件
-            $("#feeding_MES_5").val("").focus();
+            mesNo($("#feeding_MES_4").val(), $("#feeding_no_4").val(), 'feeding_no_4', 'feeding_MES_4', 'feeding_MES_5');
         }
     });
     $("#feeding_MES_5").keyup(function (event) {
@@ -283,13 +289,20 @@
     $("#feeding_no_5").keyup(function (event) {
         if (event.keyCode == 13) {
             //这里填写你要做的事件
-            $("#feeding_MES_6").val("").focus();
+            mesNo($("#feeding_MES_5").val(), $("#feeding_no_5").val(), 'feeding_no_5', 'feeding_MES_5', 'feeding_MES_6');
+
         }
     });
     $("#feeding_MES_6").keyup(function (event) {
         if (event.keyCode == 13) {
             //这里填写你要做的事件
             $("#feeding_no_6").val("").focus();
+        }
+    });
+    $("#feeding_no_6").keyup(function (event) {
+        if (event.keyCode == 13) {
+            //这里填写你要做的事件
+            mesNo($("#feeding_MES_6").val(), $("#feeding_no_6").val(), 'feeding_no_6', 'feeding_MES_6', '');
         }
     });
 </script>

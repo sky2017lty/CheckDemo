@@ -130,24 +130,24 @@ public class CheckServicesImpl implements CheckServices {
 
     @Override
     public String addFeedingCheckGroup(HttpServletRequest request) {
-        String groupno1 = request.getParameter("groupno_1");
-        String feedingMes1 = request.getParameter("feeding_MES_1");
-        String feedingNo1 = request.getParameter("feeding_no_1");
-        String groupno2 = request.getParameter("groupno_2");
-        String feedingMes2 = request.getParameter("feeding_MES_2");
-        String feedingNo2 = request.getParameter("feeding_no_2");
-        String groupno3 = request.getParameter("groupno_3");
-        String feedingMes3 = request.getParameter("feeding_MES_3");
-        String feedingNo3 = request.getParameter("feeding_no_3");
-        String groupno4 = request.getParameter("groupno_4");
-        String feedingMes4 = request.getParameter("feeding_MES_4");
-        String feedingNo4 = request.getParameter("feeding_no_4");
-        String groupno5 = request.getParameter("groupno_5");
-        String feedingMes5 = request.getParameter("feeding_MES_5");
-        String feedingNo5 = request.getParameter("feeding_no_5");
-        String groupno6 = request.getParameter("groupno_6");
-        String feedingMes6 = request.getParameter("feeding_MES_6");
-        String feedingNo6 = request.getParameter("feeding_no_6");
+        String groupno1 = request.getParameter("groupno_1").toUpperCase();
+        String feedingMes1 = request.getParameter("feeding_MES_1").toUpperCase();
+        String feedingNo1 = request.getParameter("feeding_no_1").toUpperCase();
+        String groupno2 = request.getParameter("groupno_2").toUpperCase();
+        String feedingMes2 = request.getParameter("feeding_MES_2").toUpperCase();
+        String feedingNo2 = request.getParameter("feeding_no_2").toUpperCase();
+        String groupno3 = request.getParameter("groupno_3").toUpperCase();
+        String feedingMes3 = request.getParameter("feeding_MES_3").toUpperCase();
+        String feedingNo3 = request.getParameter("feeding_no_3").toUpperCase();
+        String groupno4 = request.getParameter("groupno_4").toUpperCase();
+        String feedingMes4 = request.getParameter("feeding_MES_4").toUpperCase();
+        String feedingNo4 = request.getParameter("feeding_no_4").toUpperCase();
+        String groupno5 = request.getParameter("groupno_5").toUpperCase();
+        String feedingMes5 = request.getParameter("feeding_MES_5").toUpperCase();
+        String feedingNo5 = request.getParameter("feeding_no_5").toUpperCase();
+        String groupno6 = request.getParameter("groupno_6").toUpperCase();
+        String feedingMes6 = request.getParameter("feeding_MES_6").toUpperCase();
+        String feedingNo6 = request.getParameter("feeding_no_6").toUpperCase();
         String username = Utils.getSession(request, "name");
         boolean mesFlag = checkStringEqual(feedingMes1, feedingMes2, feedingMes3, feedingMes4, feedingMes5, feedingMes6);
         boolean noFlag = checkStringEqual(feedingNo1, feedingNo2, feedingNo3, feedingNo4, feedingNo5, feedingNo6);

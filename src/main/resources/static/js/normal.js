@@ -7,7 +7,7 @@ function getDate() {
     var year = date.getFullYear(); //获取当前年份
     var mon = date.getMonth() + 1; //获取当前月份
     var da = date.getDate(); //获取当前日
-    return year + '-' + mon + '-' + da ;
+    return year + '-' + mon + '-' + da;
 }
 
 function getTime() {
@@ -113,9 +113,9 @@ function checkSession(sname) {
     $.ajax({
         url: "/checkSession",    //请求的url地址
         dataType: "json",   //返回格式为json
-        data:  {sname: sname},    //参数值
+        data: {sname: sname},    //参数值
         type: "POST",   //请求方式
-        async : false,
+        async: false,
         success: function (req) {
             //请求成功时处理
             flag = req.code === 0;
@@ -129,9 +129,9 @@ function delSession(sname) {
     $.ajax({
         url: "/delSession",    //请求的url地址
         dataType: "json",   //返回格式为json
-        data:  {sname: sname},    //参数值
+        data: {sname: sname},    //参数值
         type: "POST",   //请求方式
-        async : false,
+        async: false,
         success: function (req) {
             //请求成功时处理
             flag = req.code === 0;
@@ -166,5 +166,30 @@ function playAudio(flag) {
         audioSuccess.play();
     } else {
         audioFailed.play();
+    }
+}
+
+var first = 0, second = 0;
+function checkInput(inputId) {
+    $("#" + inputId).keyup(function (e) {
+        if ($(this).val().length % 2 != 0) {
+            first = new Date().valueOf();
+        } else {
+            second = new Date().valueOf();
+        }
+        //通过判断两次输入的时间 间隔是否为手动输入.这里面限制100ms.
+        if ($(this).val().length > 1 && Math.abs(first - second) > 100) {
+            $(this).val('');
+        }
+    });
+}
+
+function mesNo(mes, no, fno, fid, tid) {
+    if (!/^[A-Z0-9]+$/.test(mes) || !/^[A-Z0-9]+$/.test(no)) {
+        playAudio(false);
+        $("#" + fno).val('');
+        $("#" + fid).val('').focus();
+    } else {
+        $("#" + tid).val('').focus();
     }
 }
