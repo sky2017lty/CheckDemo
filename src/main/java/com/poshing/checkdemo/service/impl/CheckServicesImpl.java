@@ -42,7 +42,7 @@ public class CheckServicesImpl implements CheckServices {
     @Override
     public String checkData(HttpServletRequest request) {
         List<Feedingcheck> checkList = feedingcheckDao.selectList(new QueryWrapper<Feedingcheck>()
-                .orderByDesc("feeding_timestamp").orderByAsc("feeding_groupno"));
+                .orderByAsc("feeding_timestamp", "feeding_groupno"));
         return JsonUtils.getInstance().formatLayerJson(0, "success", checkList.size(), JSON.toJSONString(checkList));
     }
 
@@ -149,31 +149,10 @@ public class CheckServicesImpl implements CheckServices {
         String feedingMes6 = request.getParameter("feeding_MES_6");
         String feedingNo6 = request.getParameter("feeding_no_6");
         String username = Utils.getSession(request, "name");
-        ArrayList<String> arrayList = new ArrayList<>(0);
-        if (!Utils.isNull(feedingMes1)) {
-            arrayList.add(feedingMes1);
-        }
-        if (!Utils.isNull(feedingMes2)) {
-            arrayList.add(feedingMes2);
-        }
-        if (!Utils.isNull(feedingMes3)) {
-            arrayList.add(feedingMes3);
-        }
-        if (!Utils.isNull(feedingMes4)) {
-            arrayList.add(feedingMes4);
-        }
-        if (!Utils.isNull(feedingMes5)) {
-            arrayList.add(feedingMes5);
-        }
-        if (!Utils.isNull(feedingMes6)) {
-            arrayList.add(feedingMes6);
-        }
-        for (int i = 0; i < arrayList.size(); i++) {
-            for (int j = i + 1; j < arrayList.size(); j++) {
-                if (arrayList.get(i).equals(arrayList.get(j))) {
-                    return JsonUtils.getInstance().formatLayerJson(200, "MES出现重复");
-                }
-            }
+        boolean mesFlag = checkStringEqual(feedingMes1, feedingMes2, feedingMes3, feedingMes4, feedingMes5, feedingMes6);
+        boolean noFlag = checkStringEqual(feedingNo1, feedingNo2, feedingNo3, feedingNo4, feedingNo5, feedingNo6);
+        if (mesFlag || noFlag) {
+            return JsonUtils.getInstance().formatLayerJson(200, "MES出现重复");
         }
         Feedingcheck mes1 = feedingcheckDao.selectOne(new QueryWrapper<Feedingcheck>()
                 .eq("feeding_MES", feedingMes1));
@@ -226,7 +205,8 @@ public class CheckServicesImpl implements CheckServices {
 
     @Override
     public String getLastGroup(HttpServletRequest request) {
-        List<Object> one = groupDao.selectObjs(new QueryWrapper<Feedinggroup>().select("min(group_timestamp)"));
+        List<Object> one = groupDao.selectObjs(new QueryWrapper<Feedinggroup>().select("max(group_timestamp)"));
+//        List<Object> one = groupDao.selectObjs(new QueryWrapper<Feedinggroup>().select("min(group_timestamp)"));
         if (one == null) {
             return JsonUtils.getInstance().formatLayerJson(200, "找不到数据");
         }
@@ -267,11 +247,11 @@ public class CheckServicesImpl implements CheckServices {
             cutting2(feedingMes3, feedingNo3, feedingMes4, feedingNo4, username);
             Feedingcheck feedingcheck = new Feedingcheck();
             feedingcheck.setFeedingGroupno("3");
-            feedingcheck.setFeedingNo("3");
+            feedingcheck.setFeedingNo(feedingNo5);
             feedingcheckDao.update(feedingcheck, new UpdateWrapper<Feedingcheck>()
                     .eq("feeding_MES", feedingMes5));
             feedingcheck.setFeedingGroupno("4");
-            feedingcheck.setFeedingNo("4");
+            feedingcheck.setFeedingNo(feedingNo6);
             feedingcheckDao.update(feedingcheck, new UpdateWrapper<Feedingcheck>()
                     .eq("feeding_MES", feedingMes6));
         }
@@ -279,29 +259,29 @@ public class CheckServicesImpl implements CheckServices {
             cutting2(feedingMes1, feedingNo1, feedingMes2, feedingNo2, username);
             Feedingcheck feedingcheck = new Feedingcheck();
             feedingcheck.setFeedingGroupno("1");
-            feedingcheck.setFeedingNo("1");
+            feedingcheck.setFeedingNo(feedingNo3);
             int mes3 = feedingcheckDao.update(feedingcheck, new UpdateWrapper<Feedingcheck>()
                     .eq("feeding_MES", feedingMes3));
             feedingcheck.setFeedingGroupno("2");
-            feedingcheck.setFeedingNo("2");
+            feedingcheck.setFeedingNo(feedingNo4);
             int mes4 = feedingcheckDao.update(feedingcheck, new UpdateWrapper<Feedingcheck>()
                     .eq("feeding_MES", feedingMes4));
             if (mes3 == 1 && mes4 == 1) {
                 feedingcheck.setFeedingGroupno("3");
-                feedingcheck.setFeedingNo("3");
+                feedingcheck.setFeedingNo(feedingNo5);
                 feedingcheckDao.update(feedingcheck, new UpdateWrapper<Feedingcheck>()
                         .eq("feeding_MES", feedingMes5));
                 feedingcheck.setFeedingGroupno("4");
-                feedingcheck.setFeedingNo("4");
+                feedingcheck.setFeedingNo(feedingNo6);
                 feedingcheckDao.update(feedingcheck, new UpdateWrapper<Feedingcheck>()
                         .eq("feeding_MES", feedingMes6));
             } else {
                 feedingcheck.setFeedingGroupno("1");
-                feedingcheck.setFeedingNo("1");
+                feedingcheck.setFeedingNo(feedingNo5);
                 feedingcheckDao.update(feedingcheck, new UpdateWrapper<Feedingcheck>()
                         .eq("feeding_MES", feedingMes5));
                 feedingcheck.setFeedingGroupno("2");
-                feedingcheck.setFeedingNo("2");
+                feedingcheck.setFeedingNo(feedingNo6);
                 feedingcheckDao.update(feedingcheck, new UpdateWrapper<Feedingcheck>()
                         .eq("feeding_MES", feedingMes6));
             }
@@ -402,5 +382,18 @@ public class CheckServicesImpl implements CheckServices {
             flag = 1;
         }
         return Utils.returnJson(flag);
+    }
+
+    private boolean checkStringEqual(String... str) {
+        for (int i = 0; i < str.length; i++) {
+            if (Utils.isNull(str[i])) {
+                for (int j = i + 1; j < str.length; j++) {
+                    if (str[i].equals(str[j])) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
