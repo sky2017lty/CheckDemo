@@ -10,6 +10,23 @@ function getDate() {
     return year + '-' + mon + '-' + da;
 }
 
+function getDateTime() {
+    var date = new Date();
+    var h = date.getHours(); //获取小时
+    if (h < 10) {
+        h = "0" + h;
+    }
+    var m = date.getMinutes(); //获取分钟
+    if (m < 10) {
+        m = "0" + m;
+    }
+    var s = date.getSeconds(); //获取秒
+    if (s < 10) {
+        s = "0" + s;
+    }
+    return h + ':' + m + ':' + s;
+}
+
 function getTime() {
     var date = new Date();
     var year = date.getFullYear(); //获取当前年份
@@ -170,6 +187,7 @@ function playAudio(flag) {
 }
 
 var first = 0, second = 0;
+
 function checkInput(inputId) {
     $("#" + inputId).keyup(function (e) {
         if ($(this).val().length % 2 != 0) {
@@ -185,11 +203,31 @@ function checkInput(inputId) {
 }
 
 function mesNo(mes, no, fno, fid, tid) {
-    if (!/^[A-Z0-9]+$/.test(mes) || !/^[A-Z0-9]+$/.test(no)) {
+    if (isNull(mes) || isNull(no)) {
         playAudio(false);
         $("#" + fno).val('');
         $("#" + fid).val('').focus();
     } else {
         $("#" + tid).val('').focus();
+    }
+}
+
+function checkMES(mes, no, type) {
+    if (!isNull(mes)) {
+        if (!isNull(no)) {
+            return !isNull(type);
+        }
+    }
+    return false;
+}
+
+function checkType(lastId, thisId) {
+    if (isNull(thisId)) {
+        return false;
+    }
+    if (lastId === thisId) {
+        return true;
+    } else {
+        return false;
     }
 }

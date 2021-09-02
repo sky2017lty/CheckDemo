@@ -83,6 +83,7 @@ public class CheckServicesImpl implements CheckServices {
         if (mes || no) {
             return JsonUtils.getInstance().formatLayerJson(200, "数据错误，请重新核对");
         }
+        delEmptyGroup();
         List<Object> one = groupDao.selectObjs(new QueryWrapper<Feedinggroup>().select("min(group_timestamp)"));
         if (one == null) {
             return JsonUtils.getInstance().formatLayerJson(200, "找不到数据");
@@ -148,6 +149,18 @@ public class CheckServicesImpl implements CheckServices {
         String groupno6 = request.getParameter("groupno_6").toUpperCase();
         String feedingMes6 = request.getParameter("feeding_MES_6").toUpperCase();
         String feedingNo6 = request.getParameter("feeding_no_6").toUpperCase();
+        String feedingDate1 = request.getParameter("feeding_date_1");
+        String feedingDate2 = request.getParameter("feeding_date_2");
+        String feedingDate3 = request.getParameter("feeding_date_3");
+        String feedingDate4 = request.getParameter("feeding_date_4");
+        String feedingDate5 = request.getParameter("feeding_date_5");
+        String feedingDate6 = request.getParameter("feeding_date_6");
+        String feedingTime1 = request.getParameter("feeding_time_1");
+        String feedingTime2 = request.getParameter("feeding_time_2");
+        String feedingTime3 = request.getParameter("feeding_time_3");
+        String feedingTime4 = request.getParameter("feeding_time_4");
+        String feedingTime5 = request.getParameter("feeding_time_5");
+        String feedingTime6 = request.getParameter("feeding_time_6");
         String username = Utils.getSession(request, "name");
         boolean mesFlag = checkStringEqual(feedingMes1, feedingMes2, feedingMes3, feedingMes4, feedingMes5, feedingMes6);
         boolean noFlag = checkStringEqual(feedingNo1, feedingNo2, feedingNo3, feedingNo4, feedingNo5, feedingNo6);
@@ -181,12 +194,12 @@ public class CheckServicesImpl implements CheckServices {
             return JsonUtils.getInstance().formatLayerJson(200, "failed");
         }
         //mes为空
-        JSONObject feeding1 = addFeeding(feedingMes1, feedingNo1, username, feedingGroup.getUuid(), groupno1, feedingGroup.getGroupTimestamp());
-        JSONObject feeding2 = addFeeding(feedingMes2, feedingNo2, username, feedingGroup.getUuid(), groupno2, feedingGroup.getGroupTimestamp());
-        JSONObject feeding3 = addFeeding(feedingMes3, feedingNo3, username, feedingGroup.getUuid(), groupno3, feedingGroup.getGroupTimestamp());
-        JSONObject feeding4 = addFeeding(feedingMes4, feedingNo4, username, feedingGroup.getUuid(), groupno4, feedingGroup.getGroupTimestamp());
-        JSONObject feeding5 = addFeeding(feedingMes5, feedingNo5, username, feedingGroup.getUuid(), groupno5, feedingGroup.getGroupTimestamp());
-        JSONObject feeding6 = addFeeding(feedingMes6, feedingNo6, username, feedingGroup.getUuid(), groupno6, feedingGroup.getGroupTimestamp());
+        JSONObject feeding1 = addFeeding(feedingMes1, feedingNo1, username, feedingGroup.getUuid(), groupno1, feedingGroup.getGroupTimestamp(), feedingDate1, feedingTime1);
+        JSONObject feeding2 = addFeeding(feedingMes2, feedingNo2, username, feedingGroup.getUuid(), groupno2, feedingGroup.getGroupTimestamp(), feedingDate2, feedingTime2);
+        JSONObject feeding3 = addFeeding(feedingMes3, feedingNo3, username, feedingGroup.getUuid(), groupno3, feedingGroup.getGroupTimestamp(), feedingDate3, feedingTime3);
+        JSONObject feeding4 = addFeeding(feedingMes4, feedingNo4, username, feedingGroup.getUuid(), groupno4, feedingGroup.getGroupTimestamp(), feedingDate4, feedingTime4);
+        JSONObject feeding5 = addFeeding(feedingMes5, feedingNo5, username, feedingGroup.getUuid(), groupno5, feedingGroup.getGroupTimestamp(), feedingDate5, feedingTime5);
+        JSONObject feeding6 = addFeeding(feedingMes6, feedingNo6, username, feedingGroup.getUuid(), groupno6, feedingGroup.getGroupTimestamp(), feedingDate6, feedingTime6);
         JSONArray jsonArray = new JSONArray();
         jsonArray.add(feeding1);
         jsonArray.add(feeding2);
@@ -211,6 +224,7 @@ public class CheckServicesImpl implements CheckServices {
             return JsonUtils.getInstance().formatLayerJson(200, "找不到数据");
         }
         String timestamp = (String) one.get(0);
+        delEmptyGroup();
         List<Feedingcheck> selectList = feedingcheckDao.selectList(new QueryWrapper<Feedingcheck>().eq("feeding_timestamp", timestamp).orderByAsc("feeding_groupno"));
         return JsonUtils.getInstance().formatLayerJson(0, "success", selectList.size(), JSON.toJSONString(selectList));
     }
@@ -315,7 +329,9 @@ public class CheckServicesImpl implements CheckServices {
         return "1".equals(warning);
     }
 
-    private JSONObject addFeeding(String feedingMes, String feedingNo, String username, String group, String groupNo, String groupTimeStamp) {
+    private JSONObject addFeeding(String feedingMes, String feedingNo, String username,
+                                  String group, String groupNo, String groupTimeStamp,
+                                  String date, String time) {
         JSONObject result = new JSONObject();
         boolean mes = Utils.isNull(feedingMes);
         boolean no = Utils.isNull(feedingNo);
@@ -335,8 +351,8 @@ public class CheckServicesImpl implements CheckServices {
             one.setFeedingGroup(group);
             one.setFeedingGroupno(groupNo);
             one.setFeedingTimestamp(groupTimeStamp);
-            one.setDate(Utils.getDate());
-            one.setTime(Utils.getTime());
+            one.setDate(date);
+            one.setTime(time);
             int flag = feedingcheckDao.insert(one);
             if (1 == flag) {
                 result.put("code", 0);
@@ -392,5 +408,23 @@ public class CheckServicesImpl implements CheckServices {
             }
         }
         return false;
+    }
+
+    private void delEmptyGroup() {
+        while (true) {
+            List<Object> one = groupDao.selectObjs(new QueryWrapper<Feedinggroup>().select("min(group_timestamp)"));
+            if (one != null) {
+                String timestamp = (String) one.get(0);
+                List<Feedingcheck> selectList = feedingcheckDao.selectList(new QueryWrapper<Feedingcheck>().eq("feeding_timestamp", timestamp).orderByAsc("feeding_groupno"));
+                if (selectList.size() == 0) {
+                    groupDao.delete(new QueryWrapper<Feedinggroup>().eq("group_timestamp", timestamp));
+                } else {
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+
     }
 }
